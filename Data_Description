@@ -1,0 +1,70 @@
+Description
+
+Motivation
+
+Sustainable agriculture stands at the intersection of environmental responsibility and food security.
+
+Earth observation technologies, particularly satellite imagery, play a pivotal role in enabling precision agriculture and monitoring crop health.
+
+Deep learning, a subset of artificial intelligence, empowers us to extract actionable insights from these vast datasets.
+
+By combining deep learning techniques with Earth observation data, we can accurately map and monitor crop types based on their distinct spectral characteristics.
+
+Furthermore, by incorporating additional contextual information from diverse sources (e.g., street-level photos, UAVs, etc.), we can further enhance the reliability of the final decisions.
+
+This synergistic approach aims to facilitate sustainable land management and resource optimization, ultimately contributing to a more food-secure and environmentally sustainable future.
+
+Data Acquisition
+
+An Agriculture monitoring Data Cube (ADC) [1] has been employed to facilitate satellite data processing based on parcel geometries and Land Parcel Identification System (LPIS) data provided by ENVISION's open platform.
+
+ADC is an automated, modular, end-to-end framework for discovering, pre-processing, and indexing optical and Synthetic Aperture Radar (SAR) images into a multidimensional cube.
+
+Sentinel-2 optical images
+
+A time series of Sentinel-2 images, covering the period from November 1st, 2021, to May 31st, 2022, was gathered for the specified area of interest.
+
+The images were atmospherically corrected using the sen2Cor software, transforming them from Top-Of-Atmosphere (TOA) Level 1C products to Bottom-Of-Atmosphere (BOA) Level 2A products.
+
+These enhanced products also include the Scene Classification Layer (SCL), providing a pixel classification map that identifies features such as clouds, cloud shadows, vegetation, and other relevant elements.
+
+To ensure relevance to specific areas, the images were further re-projected and clipped accordingly.
+
+Subsequently, a process of random sample pixel selection was performed within each agricultural field.
+
+Additionally, linear interpolation was applied to fill in missing data points, enhancing the continuity and accuracy of the time series.
+
+The time series was harmonized to a common temporal reference system, resulting in a standardized 5-day resolution, facilitating meaningful analysis of crop dynamics.
+
+Finally, based on standard Sentinel bands, several widely used vegetation indices were formulated (e.g., NDVI, NDWI, PSRI).
+
+Sentinel-1 SAR data
+
+Level-1 Ground-Range-Detected (GRD) products extracted from Sentinel-1 imagery in Interferometric Wide (IW) swath mode were processed to generate backscatter coefficients.
+
+The GRD data pre-processing (using the snappy library) included area-of-interest clipping, radiometric calibration, speckle filtering via the Refined-Lee filter, terrain correction using Shuttle Radar Topography Mission (SRTM) 10-m data, and conversion of backscatter coefficients into decibels (dB).
+
+Orbit auxiliary data, providing vital information on the satellite's position during SAR acquisition, were retrieved and applied.
+
+To ensure precise alignment, the Sentinel-1 back-geocoding process was employed, co-registering split products based on updated orbit information and a digital elevation model.
+
+All coefficients were computed in VV and VH polarization modes.
+
+The time series was harmonized to a common temporal reference system of 5-day resolution.
+
+Mapillary Street-Level photos
+
+The spatial resolution of satellite imagery may not consistently provide the level of detail required for precise decision-making across all agricultural fields.
+
+To address this, "space-to-ground data availability" [2] extends satellite observations to the specific field level.
+
+This approach leverages complementary data sources to optimize our ability to make informed decisions.
+
+At the ground level, we have utilized the Mapillary crowdsourcing platform to incorporate street-level images covering our area of interest.
+
+Mapillary's data is publicly accessible under a CC-BY-SA (Creative Commons Attribution-ShareAlike) license agreement.
+
+To interact with the latest version of the Mapillary API (v4), we developed a Python library for efficient data integration.
+
+The scripts for downloading imagery from Mapillary (by time range and area) can be found on GitHub.
+
